@@ -1,0 +1,18 @@
+version: '3'
+services:
+  db:
+    image: postgres:14.2-alpine
+    ports:
+      - "3306:3306"
+  web:
+    build: .
+    command: bee run --downdoc=true --gendoc=true
+    volumes:
+      - .:/go/src/DNAChainChallenge
+    working_dir: /go/src/DNAChainChallenge
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db:3306
+    depends_on:
+      - db
