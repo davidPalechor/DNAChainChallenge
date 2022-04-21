@@ -3,6 +3,6 @@ package models
 import "time"
 
 type Human struct {
-	ID         int
+	dna        string
 	InsertedAt time.Time `orm:"auto_now_add;type(datetime)"`
 }

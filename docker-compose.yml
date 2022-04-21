@@ -1,9 +1,11 @@
 version: '3'
 services:
   db:
-    image: postgres:14.2-alpine
+    image: postgres:14.2
+    environment:
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "3306:3306"
+      - "5432:5432"
   web:
     build: .
     command: bee run --downdoc=true --gendoc=true
@@ -12,7 +14,8 @@ services:
     working_dir: /go/src/DNAChainChallenge
     ports:
       - "8080:8080"
+      - "40000:40000"
     environment:
-      DB_HOST: db:3306
+      DB_HOST: db:5432
     depends_on:
       - db

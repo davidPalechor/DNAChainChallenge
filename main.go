@@ -2,10 +2,8 @@ package main
 
 import (
 	_ "DNAChainChallenge/routers"
-	"fmt"
-	"github.com/beego/beego/v2/client/orm"
 	beego "github.com/beego/beego/v2/server/web"
-	"os"
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -14,10 +12,10 @@ func main() {
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
 
-	orm.RegisterDriver("postgres", orm.DRPostgres)
-	orm.RegisterDataBase("default",
-		"postgres",
-		fmt.Sprintf("postgres://postgres:postgres@(%s)/postgres", os.Getenv("DB_HOST")),
-	)
+	//orm.RegisterDriver("postgres", orm.DRPostgres)
+	//orm.RegisterDataBase("default",
+	//		"postgres",
+	//		fmt.Sprintf("postgres://postgres:postgres@%s/postgres?sslmode=disable", os.Getenv("DB_HOST")),
+	//)
 	beego.Run()
 }

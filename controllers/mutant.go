@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"DNAChainChallenge/logic"
+	"DNAChainChallenge/viewmodels"
+	"encoding/json"
 	beego "github.com/beego/beego/v2/server/web"
+	"net/http"
 )
 
 // MutantController operations for Mutant
@@ -15,11 +18,20 @@ type MutantController struct {
 // @Description get Mutant
 // @Success 200 {object} models.Mutant
 // @Failure 403
-// @router / [get]
+// @router / [post]
 func (c *MutantController) GetAll() {
-	logic := logic.NewMutantLogic()
-	dnaMap := []string{"acab", "babb", "cbab", "bbca"}
-	response := logic.IsMutant(dnaMap)
-	c.Data["json"] = map[string]bool{"result": response}
-	c.ServeJSON()
+	defer c.ServeJSON()
+
+	var request viewmodels.IsMutantRequest
+
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &request); err != nil {
+		c.Ctx.Output.SetStatus(http.StatusBadRequest)
+		c.Data["json"] = request
+		return
+	}
+
+	logicM := logic.NewMutantLogic()
+	if response := logicM.IsMutant(request.DNA); !response {
+		c.Ctx.Output.SetStatus(http.StatusBadRequest)
+	}
 }

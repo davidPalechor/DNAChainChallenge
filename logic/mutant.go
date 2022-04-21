@@ -1,8 +1,12 @@
 package logic
 
-import "strings"
+import (
+	"DNAChainChallenge/utils"
+	"strings"
+)
 
 type MutanLogic struct {
+	DB utils.DBOrmer
 }
 
 func NewMutantLogic() *MutanLogic {
@@ -64,13 +68,48 @@ func checkDNAMap(matrix [4][4]string) int {
 	return count
 }
 
-func (m *MutanLogic) IsMutant(dna []string) bool {
-	var dnaMatrix [4][4]string
-	for i, codex := range dna {
-		copy(dnaMatrix[i][:], strings.Split(codex, ""))
+func buildSubMatrix(matrix [][]string, row int, col int) [4][4]string {
+	var subMatrix [4][4]string
+	for i := 0; i < 4; i++ {
+		copy(subMatrix[i][:], matrix[row][col:col+4])
+		row++
 	}
-	if count := checkDNAMap(dnaMatrix); count >= 2 {
-		return true
+	return subMatrix
+}
+
+func buildMatrix(matrix []string) [][]string {
+	resultMatrix := make([][]string, len(matrix))
+	for j, codex := range matrix {
+		resultMatrix[j] = strings.Split(codex, "")
+	}
+	return resultMatrix
+}
+
+func (m *MutanLogic) IsMutant(dna []string) bool {
+	matrixLength := len(dna)
+	count := 0
+
+	if matrixLength < 4 {
+		return false
+	}
+
+	dnaMatrix := buildMatrix(dna)
+	if matrixLength == 4 {
+		dnaSubMatrix := buildSubMatrix(dnaMatrix, 0, 0)
+		if localCount := checkDNAMap(dnaSubMatrix); localCount >= 2 {
+			return true
+		}
+		return false
+	}
+
+	for i := 0; i < matrixLength-3; i++ {
+		for j := 0; j < matrixLength-3; j++ {
+			dnaSubMatrix := buildSubMatrix(dnaMatrix, i, j)
+			count += checkDNAMap(dnaSubMatrix)
+			if count >= 2 {
+				return true
+			}
+		}
 	}
 	return false
 }
