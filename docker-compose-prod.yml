@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: bee run --downdoc=true --gendoc=true
+    volumes:
+      - .:/go/src/DNAChainChallenge
+    working_dir: /go/src/DNAChainChallenge
+    ports:
+      - "8080:8080"

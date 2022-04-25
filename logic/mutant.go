@@ -1,16 +1,21 @@
 package logic
 
 import (
+	"DNAChainChallenge/models"
 	"DNAChainChallenge/utils"
+	"DNAChainChallenge/viewmodels"
+	"fmt"
 	"strings"
 )
 
-type MutanLogic struct {
+type MutantLogic struct {
 	DB utils.DBOrmer
 }
 
-func NewMutantLogic() *MutanLogic {
-	return &MutanLogic{}
+func NewMutantLogic() *MutantLogic {
+	return &MutantLogic{
+		DB: utils.NewDBWrapper(),
+	}
 }
 
 func checkEqualItems(list [4]string) int {
@@ -85,7 +90,7 @@ func buildMatrix(matrix []string) [][]string {
 	return resultMatrix
 }
 
-func (m *MutanLogic) IsMutant(dna []string) bool {
+func (m *MutantLogic) IsMutant(dna []string) bool {
 	matrixLength := len(dna)
 	count := 0
 
@@ -112,4 +117,37 @@ func (m *MutanLogic) IsMutant(dna []string) bool {
 		}
 	}
 	return false
+}
+
+func (m *MutantLogic) saveMutantChain(obj viewmodels.IsMutantRequest) error {
+	storeChainString := utils.AsSha256(obj)
+	storeObjM := models.Mutant{DNA: storeChainString}
+
+	if _, err := m.DB.Insert(&storeObjM); err != nil {
+		// LastInsertId is not supported by Postgresql but is not a fatal error since the insertion is made normally
+		if !strings.Contains(err.Error(), "last insert id is unavailable") {
+			return fmt.Errorf("failed to store human chain: %s", err.Error())
+		}
+	}
+	return nil
+}
+
+func (m *MutantLogic) saveHumanChain(obj viewmodels.IsMutantRequest) error {
+	storeChainString := utils.AsSha256(obj)
+	storeObjH := models.Human{DNA: storeChainString}
+
+	if _, err := m.DB.Insert(&storeObjH); err != nil {
+		// LastInsertId is not supported by Postgresql but is not a fatal error since the insertion is made normally
+		if !strings.Contains(err.Error(), "last insert id is unavailable") {
+			return fmt.Errorf("failed to store human chain: %s", err.Error())
+		}
+	}
+	return nil
+}
+
+func (m *MutantLogic) SaveChain(obj viewmodels.IsMutantRequest, isMutant bool) error {
+	if !isMutant {
+		return m.saveHumanChain(obj)
+	}
+	return m.saveMutantChain(obj)
 }

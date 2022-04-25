@@ -31,7 +31,13 @@ func (c *MutantController) GetAll() {
 	}
 
 	logicM := logic.NewMutantLogic()
-	if response := logicM.IsMutant(request.DNA); !response {
+	isMutant := logicM.IsMutant(request.DNA)
+	if !isMutant {
 		c.Ctx.Output.SetStatus(http.StatusBadRequest)
+	}
+
+	if err := logicM.SaveChain(request, isMutant); err != nil {
+		c.Data["json"] = map[string]string{"error": err.Error()}
+		return
 	}
 }
