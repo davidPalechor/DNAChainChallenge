@@ -8,6 +8,3 @@ RUN go mod download
 COPY . .
 
 RUN go install github.com/beego/bee/v2
-
-
-CMD ["bee", "run", "--downdoc=true", "--gendoc=true"]
