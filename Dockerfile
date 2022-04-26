@@ -9,6 +9,5 @@ COPY . .
 
 RUN go install github.com/beego/bee/v2
 
-EXPOSE 8080
 
 CMD ["bee", "run", "--downdoc=true", "--gendoc=true"]
