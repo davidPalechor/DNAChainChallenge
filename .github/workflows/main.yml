@@ -34,4 +34,5 @@ jobs:
       - name: Publish
         run: |
           heroku container:push web -a $APP_NAME
-          heroku container:release web -a $APP_NAME
+          heroku container:push release -a $APP_NAME
+          heroku container:release web release -a $APP_NAME
