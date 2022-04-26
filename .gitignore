@@ -5,3 +5,4 @@
 !Dockerfile
 *.tmp
 swagger/
+*.env
