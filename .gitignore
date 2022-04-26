@@ -1,6 +1,8 @@
+.idea
 *
 !/**/
 !*.*
 !Dockerfile
 *.tmp
 swagger/
+*.env
