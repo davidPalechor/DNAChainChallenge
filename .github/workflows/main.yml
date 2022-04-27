@@ -10,9 +10,9 @@ on:
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   APP_NAME: ${{ 'dna-chain-app' }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 jobs:
-
   deploy:
     name: Deploy to Heroku
     runs-on: ubuntu-18.04
@@ -35,3 +35,6 @@ jobs:
         run: |
           heroku container:push web -a $APP_NAME
           heroku container:release web -a $APP_NAME
+
+      - name: Run migrations
+        run: heroku run bee migrate --conn=$DATABASE_URL --driver="postgres" -a $APP_NAME

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"DNAChainChallenge/logic"
+	"DNAChainChallenge/utils"
 	"DNAChainChallenge/viewmodels"
 	"encoding/json"
 	beego "github.com/beego/beego/v2/server/web"
@@ -30,7 +31,7 @@ func (c *MutantController) GetAll() {
 		return
 	}
 
-	logicM := logic.NewMutantLogic()
+	logicM := logic.NewMutantLogic(utils.NewDBWrapper())
 	isMutant := logicM.IsMutant(request.DNA)
 	if !isMutant {
 		c.Ctx.Output.SetStatus(http.StatusBadRequest)
