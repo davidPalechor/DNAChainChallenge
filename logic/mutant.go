@@ -12,9 +12,9 @@ type MutantLogic struct {
 	DB utils.DBOrmer
 }
 
-func NewMutantLogic() *MutantLogic {
+func NewMutantLogic(db utils.DBOrmer) *MutantLogic {
 	return &MutantLogic{
-		DB: utils.NewDBWrapper(),
+		DB: db,
 	}
 }
 
