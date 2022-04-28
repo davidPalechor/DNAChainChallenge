@@ -126,7 +126,7 @@ func (m *MutantLogic) saveMutantChain(obj viewmodels.IsMutantRequest) error {
 	if _, err := m.DB.Insert(&storeObjM); err != nil {
 		// LastInsertId is not supported by Postgresql but is not a fatal error since the insertion is made normally
 		if !strings.Contains(err.Error(), "last insert id is unavailable") {
-			return fmt.Errorf("failed to store human chain: %s", err.Error())
+			return fmt.Errorf("failed to store mutant chain: %s", err.Error())
 		}
 	}
 	return nil
