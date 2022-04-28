@@ -14,13 +14,13 @@ type MutantController struct {
 	beego.Controller
 }
 
-// GetAll ...
-// @Title GetAll
-// @Description get Mutant
-// @Success 200 {object} models.Mutant
-// @Failure 403
+// IsMutant Returns whether a DNA chain corresponds to a mutant or human
+// @Title IsMutant
+// @Description post Mutant
+// @Success 200
+// @Failure 400
 // @router / [post]
-func (c *MutantController) GetAll() {
+func (c *MutantController) IsMutant() {
 	defer c.ServeJSON()
 
 	var request viewmodels.IsMutantRequest

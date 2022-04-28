@@ -6,6 +6,7 @@ type DBOrmer interface {
 	Insert(obj interface{}) (int64, error)
 	One(queryable orm.QuerySeter, obj interface{}, cols ...string) error
 	GetQueryTable(model string) orm.QuerySeter
+	Count(querytable orm.QuerySeter) (int64, error)
 }
 
 type DBWrapper struct {
@@ -26,4 +27,8 @@ func (d *DBWrapper) Insert(obj interface{}) (int64, error) {
 
 func (d *DBWrapper) One(querytable orm.QuerySeter, obj interface{}, cols ...string) error {
 	return querytable.One(obj, cols...)
+}
+
+func (d *DBWrapper) Count(querytable orm.QuerySeter) (int64, error) {
+	return querytable.Count()
 }

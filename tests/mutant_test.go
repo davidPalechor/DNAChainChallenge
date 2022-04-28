@@ -42,6 +42,21 @@ func TestMutantLogic(t *testing.T) {
 			input:     []string{"ATGC", "CAGT", "TTAT", "AGAA"},
 			response_: false,
 		},
+		{
+			name:      "Should be mutant (4x4) diagonal",
+			input:     []string{"ATGA", "CAAG", "TAAT", "AGAA"},
+			response_: true,
+		},
+		{
+			name:      "Should be mutant (5x5) diagonal",
+			input:     []string{"ATGCG", "CAGTG", "TTATG", "AGAAG", "CCCCT"},
+			response_: true,
+		},
+		{
+			name:      "Should not be mutant (5x5)",
+			input:     []string{"CTGCG", "CAGTG", "TTATG", "AGAAG", "CCTCT"},
+			response_: false,
+		},
 	}
 
 	Convey("Test Mutant Logic", t, func() {
